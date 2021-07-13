@@ -1,0 +1,15 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="CCS_KnowledgeBaseCommunityController">
+
+    <aura:attribute name="contactId" type="string" />
+    <aura:attribute name="gridColumns" type="List" access="PRIVATE" />
+    <aura:attribute name="gridData" type="Object" access="PRIVATE" />
+    <aura:attribute name="gridExpandedRows" type="List" access="PRIVATE" />
+    <aura:attribute name="managedTopics" type="ConnectApi.ManagedTopic[]" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <lightning:navigation aura:id="navService" />
+    
+    <lightning:tree items="{! v.gridData }" />
+    
+</aura:component>

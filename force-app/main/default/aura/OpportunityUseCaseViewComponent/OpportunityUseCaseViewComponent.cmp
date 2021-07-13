@@ -1,0 +1,15 @@
+<aura:component>
+	<aura:attribute name="useCaseId" type="String"  />
+	<aura:attribute name="fieldsToShow" type="List"  />
+	<aura:if isTrue="{!!empty(v.useCaseId)}"  >
+		<lightning:recordViewForm objectApiName="Use_Case__c" recordId="{!v.useCaseId}" aura:id="recordViewForm">
+			<lightning:layout  multipleRows="true"  aura:id="useCaseAccordian">
+				<aura:iteration items="{!v.fieldsToShow}" var="field" >
+	                <lightning:layoutItem   class="slds-m-bottom_medium" size="6" >				     
+	                	<lightning:outputField fieldName="{!field.apiName}" />
+	                </lightning:layoutItem>
+	            </aura:iteration>
+			</lightning:layout>
+		</lightning:recordViewForm>
+	</aura:if>	
+</aura:component>

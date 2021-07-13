@@ -1,0 +1,78 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForRecordHome" access="global" 
+controller="OpportunityUseCaseConfigController"  >
+
+    <aura:attribute name="opportunityId" type="String" />
+    <aura:attribute name="records" type="Object" />
+    <aura:attribute name="columnsToShow" type="List" default="[]" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" description="Use for Showing Spinner"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:registerEvent name="OppCustomEvent"  type="c:OpportunityUseCaseEvent" />
+    <aura:html tag="style">
+        .slds-spinner_container {
+        width: 240% !important;
+        margin-left: -70% !important;
+        }
+        .slds-modal__container {
+        max-width: 50rem;
+        width: 50rem;
+        }
+    </aura:html>
+    
+    <div aura:id="editDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" class="custom-spinner" aura:id="spinner" />
+        </aura:if>
+        <div class="slds-modal__container">
+
+            <div class="slds-modal__header">
+                <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Add Existing Use Case</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium " >
+            	<div aura:id="errorDiv"></div>                 
+                <div class="slds-grid slds-grid_vertical">
+                   <div class="slds-scrollable_x slds-scrollable_y slds-grow" >
+                         <table aria-multiselectable="true" class="slds-table slds-no-row-hover slds-table_bordered slds-table_fixed-layout " role="grid" >
+                            <thead>
+                               <tr class="slds-line-height_reset">
+                                  <th class="slds-text-title_caps" scope="col" style="width: 3.75rem;"></th>
+                                  <aura:iteration items="{!v.columnsToShow}" var="column"  >
+                                      <th aria-label="{!column.label}" aria-sort="none" class="slds-text-title_caps " scope="col">
+                                         <a class="slds-th__action slds-text-link_reset" role="button" tabindex="-1">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                               <span class="slds-truncate" title="{!column.label}">{!column.label}</span>
+                                            </div>
+                                         </a>
+                                      </th>
+                                  </aura:iteration>                                  
+                               </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.records}" var="recordObj" indexVar="index" >
+                                   <tr aria-selected="false" class="slds-hint-parent">
+                                        <td class="slds-text-align_right" role="gridcell" tabindex="0">
+                                         <lightning:input type="checkbox-button" name="{! 'checkbox-' + recordObj.Id}" checked="{!recordObj.selected}"/>
+                                        </td>
+                                        <aura:iteration items="{!v.columnsToShow}" var="column"  >
+                                            <td role="gridcell">
+                                                <div class="slds-truncate" title="col">
+                                                   <c:DynamicFieldAccessComponent record="{!recordObj}" field="{!column.apiName}"/>
+                                                </div>
+                                            </td>
+                                        </aura:iteration>
+                                   </tr>
+                               </aura:iteration>
+                            </tbody>
+                         </table>
+                      </div>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelDialog}"/>
+                <lightning:button variant="brand" label="Save" name="save" type="submit" onclick="{!c.save}"  />
+            </div>
+        </div>
+    </div>
+    <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+</aura:component>

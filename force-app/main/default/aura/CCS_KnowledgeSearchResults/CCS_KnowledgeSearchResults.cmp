@@ -1,0 +1,94 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" 
+    controller="CCS_KnowledgeSearchController" >
+
+    <!-- attributes -->
+    <aura:attribute name="knowledgeArticlesList" type="List" default="[]" access="global"  />
+    <aura:attribute name="activeAccordians" type="List" default="[]"/>
+	<aura:attribute name="noResult" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="searchKeyword" type="String" default="" access="global"/>
+    <aura:attribute name="resultCount" type="Integer" default="0" access="global"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="true" description="Use for Showing Spinner"/>
+    <aura:attribute name="showSpinner1" type="Boolean" default="true" description="Use for Showing Spinner"/>
+
+    <!-- handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <div class="slds-box custom-box" style="position: relative;width: 100%;height: 100%;">
+
+	    <aura:if isTrue="{!v.showSpinner}">
+	        <lightning:spinner alternativeText="Loading" size="medium" class="custom-spinner" aura:id="spinner" />
+	    </aura:if>
+
+	    <aura:if isTrue="{!v.noResult}">
+	    	<div class="noResults slds-p-vertical--xx-large slds-m-top--large slds-align--absolute-center slds-grid--vertical 
+	    		slds-text-align--center slds-text-color--weak" >
+			    <figure class="slds-p-bottom--xx-large" >
+			    	<span class="uiImage">
+			    		<img src="/img/search/no-results.png" class="" alt=""/>
+			    		</span>
+			    	</figure>
+			    <div class="slds-text-heading--large noResultsTitle slds-p-bottom--large" >
+			    	No results for "{!v.searchKeyword}"
+			    </div>
+			</div>
+	    </aura:if>
+
+	    <aura:if isTrue="{!not(v.noResult)}">
+		    <lightning:layout multipleRows="true" verticalAlign="start" class="custom-layout" >
+			        <lightning:layoutItem size="12">
+		        		<lightning:accordion aura:id="accordion" activeSectionName="{!v.activeAccordians}"
+			                allowMultipleSectionsOpen="true" onsectiontoggle="{!c.toggle}">
+			                <aura:if isTrue="{!!empty(v.knowledgeArticlesList)}"  >
+			                	<lightning:accordionSection name="knowledge" 
+			                  		label="{!'Knowledge (' + v.knowledgeArticlesList.length +')'}" >
+				                    <aura:set attribute="body">
+				                    	<!-- body -->
+				                    	<aura:iteration items="{!v.knowledgeArticlesList}" var="item"  >
+				                    		<div class="slds-scrollable--y uiScroller forceSearchResultsList" >
+											    <div class="slds-size--1-of-1 scroller" >
+											        <div class="slds-has-dividers--bottom uiAbstractList">
+											            <div class="custom-listContent">
+                                                            <ul>
+											                    <li class="kbResultStencil slds-item slds-var-p-vertical_small slds-var-p-horizontal_large slds-theme--default forceRecordLayout" >
+											                        <div class="slds-tile" >
+											                            <p class="slds-truncate slds-var-p-bottom_xxx-small" >
+											                            <div class="outputLookupContainer forceOutputLookupWithPreview" >
+											                                <a class="itemTitle textUnderline outputLookupLink slds-truncate forceOutputLookup" onclick="{!c.goToUrl}"
+											                                	id="{! '/s/article/' + item.UrlName}" target="_blank" >
+											                                	{!item.Title}
+											                                </a>
+											                            </div>
+											                            </p>
+											                            <div class="slds-tile__detail slds-text-body--small slds-var-p-bottom_xxx-small" >
+											                                <ul class="slds-list--horizontal slds-wrap slds-has-dividers--right custom-line" >
+											                                    <li class="slds-item" >
+											                                    	<ui:OutputText value="{!item.ArticleNumber}"/>
+											                                    </li>
+											                                    <li class="slds-item">
+                                                                                    Last Modified &nbsp;
+                                                                                    <lightning:formattedDateTime value="{!item.LastModifiedDate}" year="numeric" day="2-digit" month="long" hour="2-digit" minute="2-digit"/>
+											                                    </li>
+											                                </ul>
+											                            </div>
+											                            <div > 
+											                                {!item.Summary}
+											                            </div>
+											                        </div>
+											                    </li>
+											                </ul>
+											            </div>
+											        </div>
+											    </div>
+											</div>
+				                    	</aura:iteration>
+			                      	</aura:set>
+			                  	</lightning:accordionSection>
+			                </aura:if>
+                  	
+			            </lightning:accordion>        
+			        </lightning:layoutItem>
+		    </lightning:layout>
+		</aura:if>
+	</div>
+</aura:component>

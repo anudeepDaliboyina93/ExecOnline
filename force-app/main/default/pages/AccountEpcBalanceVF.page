@@ -1,0 +1,17 @@
+<apex:page standardController="Account">
+  <apex:includeLightning />
+    <div id="container"></div>
+    
+    <script>
+        $Lightning.use("c:lwcAccountEpcBalanceApp", function() {
+            $Lightning.createComponent(
+                "c:accountEpcBalance",
+                { 'recordId' : '{!Account.Id}'},
+                "container",
+                function(cmp) {
+                    console.log('component created');
+                }
+            );
+        });
+    </script>
+</apex:page>

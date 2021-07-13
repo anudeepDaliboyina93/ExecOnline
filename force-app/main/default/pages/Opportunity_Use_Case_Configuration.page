@@ -1,0 +1,25 @@
+<apex:page standardController="Opportunity">
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script type = "text/javascript">
+        var recordId = '{!$CurrentPage.parameters.id}';
+        var accountId ='{!Opportunity.Account}' ;
+        if(recordId){
+          $Lightning.use("c:OpportunityUseCaseConfigApp", function() {
+            $Lightning.createComponent("c:OpportunityUseCaseConfigComponent",
+            {
+               oppId : recordId,
+               accountId : accountId
+            },
+            "lightning",
+            function(cmp) {
+            });
+          });
+        }
+    </script>
+    <style>
+      #auraErrorMessage {
+        display: none;
+      }
+    </style>
+</apex:page>

@@ -1,0 +1,56 @@
+<template>
+
+    <lightning-card  title="My Events">
+        <div class="slds-p-horizontal_small">
+            
+            <div class="table-wrapper">
+
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Date">Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Subject">Subject</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Status">Status</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={myEvents} for:item="event">
+                            <tr key={event.Id} class={event.cssClass}>
+                                <td data-label="Close Date">
+                                    <div class="slds-truncate" title={event.ActivityDateTime}>
+                                        <lightning-formatted-date-time value={event.ActivityDateTime} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                        minute="2-digit" hour12="true"></lightning-formatted-date-time>
+                                    </div>
+                                </td>
+                                <th data-label="Subject" scope="row">
+                                    <div class="slds-truncate subject" title={event.Subject} onclick={navigateToEvent} data-event-id={event.Id}>
+                                        {event.Subject}
+                                    </div>
+                                </th>
+                                <td data-label="Status">
+                                    <div class="status">
+                                        <lightning-icon icon-name={event.iconName} alternative-text={event.Status__c} title={event.Status__c} size="x-small" variant="" class="slds-m-right_small"></lightning-icon>
+                                            {event.Status__c}
+                                    </div>
+                                    <div class="action">
+                                        <lightning-button variant="success" icon-name="utility:check" label="Complete" title="Complete" onclick={handleCompleteClick} class="slds-m-right_small" data-event-id={event.Id} disabled={event.isSaving}></lightning-button>
+                                        <lightning-button variant="destructive-text" icon-name="utility:close" label="Cancel" title="Cancel" onclick={handleCancelClick} data-event-id={event.Id} disabled={event.isSaving}></lightning-button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </lightning-card>
+
+</template>

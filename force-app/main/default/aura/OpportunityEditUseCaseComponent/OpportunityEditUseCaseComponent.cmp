@@ -1,0 +1,48 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForRecordHome" access="global" >
+
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="opportunityId" type="String" />
+    <aura:attribute name="fields" type="List" default="[]"  />
+
+    <aura:html tag="style">
+        .slds-spinner_container {
+        width: 240% !important;
+        margin-left: -70% !important;
+        }
+        .slds-modal__container {
+        max-width: 50rem;
+        width: 50rem;
+        }
+    </aura:html>
+    <div aura:id="editDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+
+            <div class="slds-modal__header">
+                <h2 class="slds-text-heading--medium">Edit Use Case</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium ">
+            <div aura:id="errorDiv"></div>   
+                <div class="slds-scrollable slds-grow">
+                    <div class="slds-scrollable_none">   
+                        <lightning:recordEditForm objectApiName="Use_Case__c" onsuccess="{!c.onSuccess}" 
+                            onerror="{!c.onError}" aura:id="recordEditForm" recordId="{!v.recordId}">          
+                			<lightning:layout  multipleRows="true"  aura:id="useCaseAccordian">
+                				<aura:iteration items="{!v.fields}" var="field" >
+                                    <lightning:layoutItem   class="slds-m-bottom_medium slds-p-around_large" size="6" >				     
+                                    	<lightning:inputField fieldName="{!field.apiName}" required="true" aura:id="inputField" 
+                                            class=""/>
+                                    </lightning:layoutItem>
+                                </aura:iteration>
+            				</lightning:layout>	
+                        </lightning:recordEditForm>	
+                    </div>
+                </div>		
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelDialog}"/>
+                <lightning:button variant="brand" label="Save" name="save" type="submit" onclick="{!c.save}"  />
+            </div>
+        </div>
+    </div>
+    <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+</aura:component>

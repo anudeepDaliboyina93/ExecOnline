@@ -1,0 +1,446 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-size_2-of-12 slds-p-bottom_medium slds-col">
+            <lightning-input type="date" name="inputDate" data-id="startDate" date-style="short" onchange={handleDateChange} placeholder="Start Date" min="2013-01-01" max="2024-12-31"></lightning-input> 
+            </div>
+            <div class="slds-p-top_large">
+              <span><lightning-icon icon-name="utility:dash" size="xx-small"></lightning-icon></span>
+          </div>
+            <div class="slds-size_2-of-12 slds-p-bottom_medium slds-col">
+              <lightning-input type="date" name="inputDate" data-id="endDate" class="endDate" date-style="short" onchange={handleDateChange} placeholder="End Date" min="2013-01-01" max="2024-12-31"></lightning-input> 
+              </div>
+            
+        <div class="slds-size_1-of-12 slds-col">
+            <span></span>
+        </div>
+        <div class="slds-size_2-of-12 slds-col slds-p-top_x-large">
+            <span>Total: {totalEPCApprovedRounded}</span>
+        </div>
+        <div class="slds-size_3-of-12 slds-col slds-p-top_x-large">
+            <span>Participant Count: {particpantCountApproved}</span>
+        </div>
+        <div class="slds-size_1-of-12 slds-col">
+            <span></span>
+        </div>
+      
+       
+    </div>
+    <div class="slds-grid slds-gutters">
+      <template if:false={showTotals}>
+        <lightning-button variant="base" icon-name="utility:chevrondown" label="Show Totals"  title="Show Totals" onclick={handleShowTotals} class="slds-p-top_large"></lightning-button>
+      </template>
+      <template if:true={showTotals}>
+        <lightning-button variant="base" icon-name="utility:chevronup" label="Hide Totals" title="Hide Totals" onclick={handleShowTotals} class="slds-p-top_large"></lightning-button>
+      </template>
+    </div>
+    <template if:true={isLoading}>
+        <lightning-spinner variant="brand" size="medium"></lightning-spinner>
+    </template> 
+    <template if:true={showTotals}><div class="slds-box slds-p-bottom_medium">
+      <lightning-layout>
+        <lightning-layout-item size="2">Program Total: {totalProgramRounded}</lightning-layout-item>
+        <lightning-layout-item size="2">Add-On Total: {totalAddOnRounded}</lightning-layout-item>
+      </lightning-layout>
+    </div></template>
+    <div id="containerDiv" onmousemove={handlemousemove} onmouseup={handlemouseup}>   
+
+      <table aria-multiselectable="true" aria-readonly="true" class="slds-scrollable_y slds-table slds-table_bordered slds-table_edit slds-table_fixed-layout slds-table_resizable-cols slds-tree slds-table_tree" role="treegrid">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th aria-label="Name" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+               
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Name">Name</span>
+                 
+                </div>
+              </a>
+              
+              <div class="slds-resizable">
+                <input type="range" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-131-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="Service" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+               
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Service">Service</span>
+                  
+                </div>
+              </a>
+             
+              <div class="slds-resizable">
+                <input type="range" aria-label="Service column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-132-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="Status" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+               
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Status">Status</span>
+                
+                </div>
+              </a>
+            
+              <div class="slds-resizable">
+                <input type="range" aria-label="Service column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-132-status" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="Total" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Total">Total</span>
+                 
+                </div>
+              </a>
+           
+              <div class="slds-resizable">
+                <input type="range" aria-label="Total column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-133-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle">
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            
+            </th>
+            <th aria-label="Program Total" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%"> 
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Program Total">Program Total</span>
+               
+                </div>
+              </a>
+           
+              <div class="slds-resizable">
+                <input type="range" aria-label="Program Total column width" class="slds-resizable__input slds-assistive-text" max="350" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+              </div>
+            </th>
+            <th aria-label="Add-On Total" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%"> 
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Add-On Total">Add-On Total</span>
+               
+                </div>
+              </a>
+           
+              <div class="slds-resizable">
+                <input type="range" aria-label="Add-On Total column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-136" max="350" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+              </div>
+            </th>
+            <th aria-label="UtilizationDate" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Utilization Date">Utilization Date</span>
+                  
+                </div>
+              </a>
+           
+              <div class="slds-resizable">
+                <input type="range" aria-label="EPC column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-133-approved-utilization" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="Opportunity" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+               
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Opportunity">Opportunity</span>
+                  
+                </div>
+              </a>
+             
+              <div class="slds-resizable">
+                <input type="range" aria-label="Opportunity column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-134-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="Approved" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Approved">Approved</span>
+                  
+                </div>
+              </a>
+         
+              <div class="slds-resizable">
+                <input type="range" aria-label="Approved column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-135-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="ApprovedBy" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Approved By">Approved By</span>
+                
+                </div>
+              </a>
+            
+              <div class="slds-resizable">
+                <input type="range" aria-label="Approved By column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-136-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th aria-label="ApprovalDate" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable dv-dynamic-width" scope="col">
+              <div class="slds-cell-fixed" style="width: 100%">
+              <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                  <span class="slds-truncate" title="Approval Date">Approval Date</span>
+                  
+                </div>
+              </a>
+            
+              <div class="slds-resizable">
+                <input type="range" aria-label="Approval Date column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-137-approved" max="1000" min="20" tabindex="-1" />
+                <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                  <span class="slds-resizable__divider"></span>
+                </span>
+              </div>
+            </div>
+            </th>
+            <th class="" scope="col" style="width:3.25rem">
+                <div class="slds-truncate slds-assistive-text" title="Actions">Actions</div>
+              </th>
+          </tr>
+        </thead>
+        <tbody>
+            <template for:each={studentsApproved} for:item="student">
+                <tr aria-level="1" aria-posinset="1" data-id={student.StudentId} aria-expanded="false" aria-selected="false" aria-setsize="4" class="slds-hint-parent expandMe" tabindex="0" key={student.StudentId}>
+                    
+                    <th class="slds-tree__item" data-label="Name" scope="row">
+
+                      <button class="slds-button slds-button_icon slds-button_icon-x-small slds-m-right_x-small" aria-controls={student.__children} aria-expanded="false" title="Expand" value={student.StudentId} onclick={handleExpandCollapse} data-target-id={student.StudentId}>
+                        <svg class="slds-button__icon" aria-hidden="true">
+                          <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Expand {student.name}</span>
+                      </button>
+
+                      <div class="slds-truncate" title={student.name}>
+                        <a data-value={student.StudentId} onclick={handleStudentNav} tabindex="-1">{student.name}</a>
+                      </div>
+                    </th>
+                    <td data-label="Service" role="gridcell">
+                      <div class="slds-truncate slds-align_absolute-center" title={student.Service}>{student.Service}</div>
+                    </td>
+                    <td data-label="Status" role="gridcell">
+                      <div class="slds-truncate dv-dynamic-width" title={student.StudentStatus}>{student.StudentStatus}</div>
+                    </td>
+                    <td data-label="EPC" role="gridcell">
+                      <div class="slds-truncate dv-dynamic-width" title={student.totalEPC}>  <template if:true={student.isComped}>
+                        <lightning-icon icon-name="utility:key" size="xx-small"></lightning-icon>
+                      </template>{student.totalEPC}</div>
+                    </td>
+                    <td data-label="Program Total" role="gridcell">
+                      <div class="slds-truncate dv-dynamic-width" title={student.EPC}>  
+                      {student.EPC}</div>
+                    </td>
+                    <td data-label="Add-On Total" role="gridcell">
+                      <div class="slds-truncate dv-dynamic-width" title={student.tagTotalEPC}>  
+                      {student.tagTotalEPC}</div>
+                    </td>
+                    <td data-label="UtilizationDate" role="gridcell">
+                      <div class="slds-truncate" title={student.UtilizationDate}> <lightning-formatted-date-time value={student.UtilizationDate}></lightning-formatted-date-time></div>
+                    </td>
+                    <td data-label="Opportunity" role="gridcell">
+                      <div class="slds-truncate" title={student.oppName}>
+                        <a data-value={student.OppId} onclick={handleOppNav} tabindex="-1">{student.oppName}</a>
+                      </div>
+                    </td>
+                    <td data-label="EPC" role="gridcell">
+                      <div class="slds-truncate slds-align_absolute-center" title={student.Approved}><template if:true={student.Approved}><lightning-icon icon-name="utility:check" size="x-small" alternative-text="Approved!" title="Approved"></lightning-icon></template></div>
+                    </td>
+                    <td data-label="EPC" role="gridcell">
+                      <div class="slds-truncate" title={student.ApprovedBy}>{student.ApprovedBy}</div>
+                    </td>
+                    <td data-label="EPC" role="gridcell">
+                      <div class="slds-truncate" title={student.ApprovalDate}> <lightning-formatted-date-time value={student.ApprovalDate}></lightning-formatted-date-time></div>
+                    </td>
+                    <td role="gridcell" style="width:3.25rem">
+                        <lightning-button-menu alternative-text="View" data-object={student} variant="border-filled" icon-size="x-small" onselect={handleRowAction}>
+                          <lightning-menu-item value={student} label="View" class={student}></lightning-menu-item>
+                        </lightning-button-menu>
+                      </td>
+                  </tr>
+                  <template for:each={student._children} for:item="studentChild">
+                    <tr aria-level="2" aria-posinset="1" aria-selected="false" aria-setsize="1" class="slds-hint-parent slds-hide" data-child-id={studentChild.StudentId} key={studentChild.StudentId}>
+                        <td class="slds-text-align_right" role="gridcell" style="width:3.25rem">
+                         <div><span> </span></div>
+                        </td>
+                       
+                        <td data-label="Service" role="gridcell">
+                          <div class="slds-truncate slds-align_absolute-center" title={studentChild.Service}>{studentChild.Service}</div>
+                        </td>
+                        <td class="slds-text-align_right" role="gridcell" style="width:3.25rem">
+                          <div><span> </span></div>
+                         </td>
+                        <td data-label="EPC" role="gridcell">
+                          <div class="slds-truncate slds-align_absolute-center" title={studentChild.EPC}>{studentChild.EPC}</div>
+                        </td>
+                        <td class="slds-text-align_right" role="gridcell" style="width:3.25rem">
+                          <div><span> </span></div>
+                         </td>
+                         <td class="slds-text-align_right" role="gridcell" style="width:3.25rem">
+                          <div><span> </span></div>
+                         </td>
+                        <td data-label="UtilizationDate" role="gridcell">
+                          <div class="slds-truncate" title={studentChild.UtilizationDate}> <lightning-formatted-date-time value={studentChild.UtilizationDate}></lightning-formatted-date-time></div>
+                        </td>
+                        <td data-label="Opportunity" role="gridcell">
+                          <div class="slds-truncate" title={studentChild.oppName}>
+                            <a href="javascript:void(0);" tabindex="-1">{studentChild.oppName}</a>
+                          </div>
+                        </td>
+                      </tr>
+                  </template>    
+            </template>
+        </tbody>
+      </table>
+      </div>
+<template if:true={showPagination}><div class="slds-grid slds-gutters">
+        
+    <div class="slds-size_6-of-12 slds-align_absolute-center">
+        <span>Displaying {startingRecord} to {endingRecord} of {totalRecountCount} records. Page {page} of {totalPage}</span>
+    </div>
+
+</div>
+<c-paginator onprevious={previousHandler} onnext={nextHandler}></c-paginator>
+</template>
+      
+   
+      
+      <div class="slds-theme_default">
+                     
+        <template if:true={showOverrideModal}>
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeUnapprovedModal}>
+                                    <lightning-icon icon-name="utility:close" size="medium">
+                                    </lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{currentStudentName}</h2>
+                            </header>
+                          
+                              <div class="slds-grid slds-wrap">
+                              
+                                <div class="slds-modal__content slds-modal__content_special slds-col slds-size_1-of-2 slds-p-right_xx-small slds-p-left_xx-small slds-p-bottom_xx-small" id="modal-content-id-3">
+                                  <div class="slds-text-heading_medium slds-p-bottom_xx-small">Student</div>
+                                    <lightning-input read-only="true" type="number" step=".01" name="epcUtilized" label="EPC Utilized" value={currentEPCUtilized} onchange={changeEPC}></lightning-input>
+                                    
+                                    <template if:true={showCompOptions}>
+                                      <div class=" slds-col slds-size_1-of-2 slds-p-right_xx-small slds-p-left_xx-small slds-p-bottom_xx-small slds-p-top_x-small" id="modal-content-id-compOptions1">
+                                        <lightning-input read-only="true" type="text" name="compedReason" label="Comped Reason" value={compedReason}></lightning-input></div>
+                                    </template>
+
+                                    <lightning-input read-only="true" type="text" name="opportunityName" label="Opportunity" value={currentOppName}></lightning-input>
+                                   
+                                </div>
+                
+                              
+                                <div class="slds-modal__content slds-modal__content_special slds-col slds-size_1-of-2 slds-p-left_xx-small slds-p-bottom_xx-small" id="modal-content-id-4">
+                                 
+                                  <div class="slds-text-heading_medium slds-p-bottom_xx-small">Tags</div>
+                                 
+                                  <template if:false={showTags}>
+                                    No Tags Available
+                                  </template>
+                                    
+                                  <div class="demo-only" style="width:320px">
+                                    <template if:true={showTags}>
+                                    <ul class="slds-has-dividers_around-space">
+                                      <template for:each={currentChildren} for:item="child">
+                                        <template if:true={child.tag}>  <li class="slds-item" key={child.StudentId}> 
+                                          <article key={child.StudentId} class="slds-tile slds-tile_board">
+                                          
+                                          <h3 class="slds-tile__title slds-truncate" key={child.StudentId} title={child.Service}>
+                                            {child.Service}
+                                          </h3>
+                                          <div class="slds-tile__detail" key={child.StudentId}>
+                                            <lightning-input read-only="true" name={child.tagId} type="number" class={child.EPC} title={child.EPC} step=".01" value={child.EPC}></lightning-input>
+                                           
+                                          </div>
+                                        
+                                        
+                                      </article>
+                                        
+                                      </li></template>
+                                    
+                                    </template>
+                                    </ul>
+                                  </template>
+
+                                  </div>
+                                </div>
+                               
+                              
+                             
+                            </div>
+                           <template if:true={showNotes}>
+                            <div class="slds-modal__content slds-col slds-size_2-of-2 slds-p-right_xx-small slds-p-left_xx-small" id="modal-content-id-5">
+                              <div class="slds-text-heading_medium slds-p-bottom_xx-small">Notes</div>
+                              <lightning-textarea read-only="true" name="notes" class="notesWithTags" value={notes} onchange={handleCurrentStudentNotes} placeholder="type notes here..."></lightning-textarea>
+                            </div>
+                           </template>
+                          
+                            <footer class="slds-modal__footer">
+                                <lightning-button label="Close" variant="neutral" onclick={closeUnapprovedModal}></lightning-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            
+        
+        </template>
+    </div>
+</template>

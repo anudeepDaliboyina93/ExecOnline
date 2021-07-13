@@ -1,0 +1,23 @@
+.slds-modal__content_special {
+    overflow: visible;
+    height: 100%;
+    
+}
+
+.slds-modal__content_newspecial {
+    height: 100%;
+
+}
+
+.slds-modal__content:last-child, .slds-modal__content_has-hidden-footer {
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.button-overflow {
+    overflow: visible;
+    z-index: 1;
+}
+.slds-modal__content{
+    overflow: initial;
+}

@@ -1,0 +1,139 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <div class="slds-clearfix">
+        <div class="slds-p-horizontal--small slds-clearfix">
+            <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Opportunity" onsuccess="{!c.showToast}">
+                <lightning:messages />
+                <div class="slds-grid slds-gutters slds-wrap">
+                    <!--section 1 start-->  
+                    <div class="slds-section slds-is-open slds-size_2-of-2" aura:id="detailsSection">
+                        <!--section header-->
+                        <h3 class="slds-section__title">
+                            <button aria-controls="detailsList" class="slds-button slds-section__title-action">
+                                <span onclick="{!c.toggleSection}" data-auraId="detailsSection">
+                                    <lightning:icon iconName="utility:switch"
+                                                    size="x-small"
+                                                    class="slds-section__title-action-icon slds-button__icon_left"
+                                                    alternativeText="button icon" 
+                                                    />
+                                </span>
+                                <span class="slds-truncate" title="Details">Details</span>
+                            </button>
+                        </h3>
+                        <!--section body-->
+                        <div class="slds-section__content slds-size_2-of-2" id="detailsList">
+                                <div class="slds-grid slds-gutters slds-wrap">
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="AccountId"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="CloseDate"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Opt_Out_Date__c"/></div>
+                                     
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Price_Per_EPC_rollup__c"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="EPCs_Unutilized__c"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Bookings_Collected__c"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Bookings_Collected_Last_Updated_Date__c"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Discounted_EPCs_Offered_Through__c"/></div>
+                                     <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Maximum_Discounted_EPCs_Offered__c"/></div>
+									 <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="EPCs_Purchased__c"/></div>
+									 <div class="slds-col slds-size_1-of-2"><lightning:inputField fieldName="Extend_Current_Unutilized_EPCs__c"/></div>
+                                </div>
+                                <div class="slds-size_2-of-2 padding-left0">
+                                    <lightning:inputField fieldName="AR_Notes__c"/>
+                                </div>            
+                            
+                        </div>
+                    </div>
+               		<!--section 1 end-->
+                    <!--section 2 start-->  
+                    <div class="slds-section slds-is-open slds-size_2-of-2" aura:id="rollupsSection">
+                        <!--section header-->
+                        <h3 class="slds-section__title">
+                            <button aria-controls="rollupsList" class="slds-button slds-section__title-action">
+                                <span onclick="{!c.toggleSection}" data-auraId="rollupsSection">
+                                    <lightning:icon iconName="utility:switch"
+                                                    size="x-small"
+                                                    class="slds-section__title-action-icon slds-button__icon_left"
+                                                    alternativeText="button icon" 
+                                                    />
+                                </span>
+                                <span class="slds-truncate" title="Rollups">Rollups</span>
+                            </button>
+                        </h3>
+                        <!--section body-->
+                        <div class="slds-section__content slds-size_2-of-2" id="rollupsList">
+                                <div class="slds-grid slds-gutters slds-wrap">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="Service_Fee_Booking_rollup__c"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                         <lightning:inputField fieldName="Total_Savings_rollup__c"/>
+                                    </div>
+            						<div class="slds-col slds-size_1-of-2">
+                                         <lightning:inputField fieldName="New_Manager_Program_Booking_rollup__c"/>
+                                    </div>                                    
+                                    <div class="slds-col slds-size_1-of-2">             
+                                       <lightning:inputField fieldName="Retail_Total__c"/>
+                                    </div>                        
+                            </div>
+                        </div>
+                    </div>
+               		<!--section 2 end-->
+
+                    <!--section 3 start-->  
+                    <div class="slds-section slds-is-open slds-size_2-of-2" aura:id="invoicingSection">
+                        <!--section header-->
+                        <h3 class="slds-section__title">
+                            <button aria-controls="invoicingList" class="slds-button slds-section__title-action">
+                                <span onclick="{!c.toggleSection}" data-auraId="invoicingSection">
+                                    <lightning:icon iconName="utility:switch"
+                                                    size="x-small"
+                                                    class="slds-section__title-action-icon slds-button__icon_left"
+                                                    alternativeText="button icon" 
+                                                    />
+                                </span>
+                                <span class="slds-truncate" title="Details">Invoicing</span>
+                            </button>
+                        </h3>
+                        <!--section body-->
+                        <div class="slds-section__content slds-size_2-of-2" id="invoicingList">
+                                <div class="slds-grid slds-gutters slds-wrap">
+                					<div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="Invoice_Sent__c"/>
+                                        <lightning:inputField fieldName="Invoicing_Terms__c"/>
+                                        <lightning:inputField fieldName="Invoicing_Comments__c"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="Date_to_Send_Invoice__c"/>
+                                        <lightning:inputField fieldName="Payment_Terms__c"/>
+                                        <lightning:inputField fieldName="Contract_End_Date__c"/>
+                                    </div>
+                
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="Invoice_Amount_1__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_2__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_3__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_4__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_5__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_6__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_7__c"/>
+                                        <lightning:inputField fieldName="Invoice_Amount_8__c"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="Invoice_Date_1__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_2__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_3__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_4__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_5__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_6__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_7__c"/>
+                                        <lightning:inputField fieldName="Invoice_Date_8__c"/>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+               		<!--section 3 end-->
+
+                    
+                </div>
+            </lightning:recordEditForm>
+        </div>
+    </div>
+</aura:component>

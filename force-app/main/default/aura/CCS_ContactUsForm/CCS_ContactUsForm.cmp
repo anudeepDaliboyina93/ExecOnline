@@ -1,0 +1,42 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="CCS_KnowledgeBaseCommunityController" access="global" >
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    
+    <aura:attribute name="newCase" type="Case" default="{'SObjectType': 'Case',
+                                                        'AccountId': '',
+                                                        'ContactId':'',
+                                                        'Subject': '',
+                                                        'Description': '',
+                                                        'SuppliedName': '',
+                                                        'SuppliedEmail': '',
+                                                        'Origin': 'Web'}" />
+       
+    <aura:handler name="init" value="{!this}" action="{!c.init}" /> 
+ 
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    <aura:if isTrue="{!!v.saved}">
+                <div class="slds-truncate slds-align-middle slds-text-align_center slds-p-top--small">
+                    <h1 class="slds-page-header__title">Submit a Case</h1>
+                    <span>Our support team will get you what you need</span>
+        </div>
+
+        <lightning:input aura:id="field" label="Name" value="{!v.newCase.SuppliedName}" required="true"/>
+        <lightning:input aura:id="field" label="Email" value="{!v.newCase.SuppliedEmail}" required="true"/>
+        <lightning:input aura:id="field" label="Subject" value="{!v.newCase.Subject}" required="true"/>
+        <lightning:textArea aura:id="field" label="Description" value="{!v.newCase.Description}" required="true"/>
+       
+        <div class="slds-m-top_medium slds-align-middle slds-text-align_center">
+            <lightning:button disabled="{!v.disabled}" variant="brand" type="button" name="save" label="Submit" onclick="{!c.submitCase}" />
+        </div>
+        
+        <aura:set attribute="else">
+            <div class="slds-truncate slds-align-middle slds-text-align_center slds-p-top--small">
+                <h1 class="slds-page-header__title">Case Submitted!</h1>
+            </div>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

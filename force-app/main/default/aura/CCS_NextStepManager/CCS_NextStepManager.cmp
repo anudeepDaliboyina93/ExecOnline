@@ -1,0 +1,25 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId">
+    
+    <div class="slds-clearfix">
+        <lightning:card iconName="action:log_event" title="Opportunity Next Step">
+            <div class="slds-p-horizontal--small slds-clearfix">
+                <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Opportunity" onsuccess="{!c.showToast}">
+                    <lightning:messages />
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning:inputField fieldName="NextStep" onchange="{!c.fieldChange}"/>
+							<!--<lightning:inputField fieldName="Next_Step_Notes__c" onchange="{!c.fieldChange}"/>-->
+                        </div>
+                        <!--<div class="slds-col slds-size_1-of-1 slds-grid slds-gutters slds-wrap">
+                            <div class="slds-m-top_x-small slds-col slds-medium-size_1-of-1 slds-large-size_1-of-2"><lightning:inputField fieldName="StageName" onchange="{!c.fieldChange}"/></div>
+                            <div class="slds-m-top_x-small slds-col slds-medium-size_1-of-1 slds-large-size_1-of-2"><lightning:inputField fieldName="Amount" onchange="{!c.fieldChange}"/></div>
+                            <div class="slds-m-top_x-small slds-col slds-medium-size_1-of-1 slds-large-size_1-of-2"><lightning:inputField fieldName="CloseDate" onchange="{!c.fieldChange}"/>   </div>                 
+                        </div>-->
+                    </div>
+                    <lightning:button class="slds-m-top_small slds-float_right" aura:id="submitBtn" disabled="true" variant="brand" type="submit" name="update" label="Save Next Step" />
+                </lightning:recordEditForm>
+            </div>
+        </lightning:card>
+    </div>
+    
+</aura:component>

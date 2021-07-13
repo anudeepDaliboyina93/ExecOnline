@@ -1,0 +1,24 @@
+<!-- apex:page standardController="Student__c" showheader="false" sidebar="false">
+  <apex:iframe src="https://us-east-1.online.tableau.com/#/site/execonline/views/ProjectedImpactdata/ImpactModel?:embed=yes" height="800px" width="100%" scrolling="true">
+  </apex:iframe>
+</apex:page -->
+
+<apex:page standardController="Student__c" showHeader="false" sidebar="false">
+    <apex:includeScript value="{!$Resource.tableaujsapi260}"/>
+    <div class="container-fluid" id='viz'></div>
+    <script type="text/javascript">
+        window.onload = function() {
+        var vizDiv = document.getElementById('viz');
+        var vizURL = 'https://us-east-1.online.tableau.com/#/site/execonline/views/SurveyFeedback/SurveyFeedback';
+        var options = {
+          height: '1000px',
+          width: '100%',
+          hideTabs: true,
+          hideToolbar: true,
+          "StudentID": "{!Student__c.Id}"
+        }
+  
+        viz = new tableauSoftware.Viz(vizDiv, vizURL, options);
+      };
+    </script>
+</apex:page>

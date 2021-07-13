@@ -1,0 +1,4 @@
+<aura:event type="Application" description="Used in Opportunity Use Case Configuration">
+	<aura:attribute name="type" type="String" />
+	<aura:attribute name="payload" type="String" />	
+</aura:event>

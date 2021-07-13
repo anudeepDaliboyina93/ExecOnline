@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,forceCommunity:searchInterface" controller="CCS_KnowledgeSearchController" access="global" >
+    
+    <aura:attribute name="searchText" type="String" default=""/>
+    
+    <lightning:layout verticalAlign="stretch">
+        <lightning:layoutItem size="10">
+            <ui:inputText aura:id="search-box" value="{!v.searchText}" keyup="{!c.onEnter}" placeholder="Search the knowledgebase..." /> <!--class="inputTall"-->
+        </lightning:layoutItem>
+        <lightning:layoutItem size="2">
+            <lightning:buttonIcon aura:id="searchbtn" variant="container" iconName="utility:search" iconClass="white" class="buttonTall buttonWide" alternativeText="search" onclick="{!c.handleClick}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+</aura:component>

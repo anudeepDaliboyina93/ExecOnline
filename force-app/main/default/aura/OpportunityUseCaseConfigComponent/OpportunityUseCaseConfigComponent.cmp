@@ -1,0 +1,92 @@
+<aura:component access="global" implements="force:hasRecordId,flexipage:availableForRecordHome" controller="OpportunityUseCaseConfigController" >
+
+	<aura:attribute name="useCaseOpportunityList" type="Object" default="{}" />
+	<aura:attribute name="useCaseList" type="List" default="[]" />
+
+	<aura:attribute name="oppId" type="String" default="" />
+	<aura:attribute name="accountId" type="String" default="" />
+	<aura:attribute name="activeAccordians" type="List" default="[]" />
+	<aura:attribute name="noResult" type="Boolean" default="false" />
+	<aura:attribute name="confirmModel" type="Boolean" default="false" />
+
+	<aura:attribute name="useCaseAccordianFieldsList" type="List" default="[]" />
+	<aura:attribute name="useCaseNewEditFieldsList" type="List" default="[]" />
+	<aura:attribute name="useCaseListBuilderFieldsList" type="List" default="[]" />
+
+	<aura:attribute name="showSpinner" type="Boolean" default="true" description="Use for Showing Spinner"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+	<aura:handler event="c:OpportunityUseCaseEvent" action="{!c.handleEvent}"/>
+
+	<aura:attribute name="oppRecord" type="Object"/>
+	<aura:handler name="change" value="{!v.oppRecord}" action="{!c.oppRecordLoaded}" />
+    <aura:attribute name="recordLoadError" type="String"/>
+	<aura:if isTrue="{!v.recordId}">
+		<force:recordData aura:id="recordLoader"
+			recordId="{!v.recordId}"
+			fields="Id,Account.Id"
+			targetFields="{!v.oppRecord}"
+			targetError="{!v.recordLoadError}"
+			/>
+	</aura:if>
+
+	<div class="slds-box slds-theme_default">
+		<aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" class="custom-spinner" aura:id="spinner" />
+        </aura:if>
+		<lightning:layout multipleRows="true" verticalAlign="start">
+			<lightning:layoutItem size="12" >
+				<div class="slds-form-element__label slds-text-heading_medium" >
+					<span >
+						Use Cases
+					</span>
+				</div>
+			</lightning:layoutItem>
+			<lightning:layoutItem size="12">
+                <br/>
+				<lightning:accordion aura:id="accordion" activeSectionName="{!v.activeAccordians}"
+					allowMultipleSectionsOpen="true">
+					<aura:iteration items="{!v.useCaseOpportunityList}" var="item" >
+				        <lightning:accordionSection name="{!item.Use_Case__r.Name}" label="{!item.Use_Case__r.Name}" >
+				            <aura:set attribute="actions">
+				                <lightning:buttonMenu aura:id="menu" alternativeText="Options" menuAlignment="right" iconSize="x-small"
+				                	onselect="{!c.onMenuSelect}" >
+				                    <lightning:menuItem value="{!'View-' + item.Use_Case__r.Id}" 
+				                    	label="View Record"/>
+				                    <lightning:menuItem value="{!'Edit-' + item.Use_Case__r.Id}" label="Edit" />
+				                    <lightning:menuItem value="{!'Remove-' + item.Use_Case__r.Id}" label="Remove from Opportunity" />
+				                </lightning:buttonMenu>
+				            </aura:set>
+				            <aura:set attribute="body">
+				            	<aura:if isTrue="{!!empty(v.useCaseAccordianFieldsList)}" >
+				            		<aura:if isTrue="{!!empty(item.Use_Case__r)}"  >
+				            			<c:OpportunityUseCaseViewComponent useCaseId="{!item.Use_Case__r.Id}" 
+										fieldsToShow="{!v.useCaseAccordianFieldsList}" aura:id="recordViewForm"/>
+				            		</aura:if>									
+							    </aura:if>
+				            </aura:set>
+				        </lightning:accordionSection>
+				    </aura:iteration>        
+	    		</lightning:accordion>
+			</lightning:layoutItem>
+            <lightning:layoutItem size="6" class="margin-toph">
+                <lightning:button label="Create New" onclick="{!c.createNewUseCase}"  /> 
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" class="margin-toph" >
+                <lightning:button label="Add Existing"  onclick="{!c.addExisting}" disabled="{!empty(v.useCaseList)}" title="{! empty(v.useCaseList) ? 'No Use Cases are available to add to this Opportunity': 'Add Existing'}"   />
+            </lightning:layoutItem>
+		</lightning:layout>	
+
+
+
+		<aura:if isTrue="{!v.noResult}" >
+			<div style="" class="margin-top1">
+				No Use Cases have been added to this Opportunity
+			</div>
+		</aura:if>
+		<div aura:id="NewUseCaseModel"/>
+		<div aura:id="AddExistingUseCaseModel"/>
+		<div aura:id="EditUseCaseModel"/>
+		<div aura:id="ConfirmRemoveUseCase"/>
+	</div>
+</aura:component>

@@ -1,0 +1,26 @@
+.table-wrapper {
+    overflow-y: auto;
+    max-height: 350px;
+}
+
+.right-now {
+    font-size: .8em;
+}
+
+.right-now lightning-button, 
+.in-future .action, 
+.in-past.scheduled .status, 
+.in-past.not-scheduled .action  {
+    display: none;
+}
+
+.right-now, .right-now td, .right-now th, .right-now:hover, .right-now td:hover, .right-now th:hover {
+    background-color: #fed8b1 !important;
+}
+
+.subject:hover {
+    cursor: pointer;
+}
+.right-now .subject:hover {
+    cursor: initial;
+}

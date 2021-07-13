@@ -1,0 +1,7 @@
+.slds-modal__content_special {
+    overflow: visible;
+    overflow-y: visible;
+    z-index: 999;
+    background: #fff;
+    height: 100%;
+}

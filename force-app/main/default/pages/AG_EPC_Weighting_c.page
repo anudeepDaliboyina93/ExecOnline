@@ -1,0 +1,6 @@
+<apex:page sidebar="true" showHeader="true" docType="html-4.01-strict">
+<CRMC_PP:Grid ObjectName="EPC_Weighting__c" DelayLoad="false"  ViewID="a6J1Y000000g0SDUAY" 
+ EnableNewButton="true"  EnableNewInline="true"  EnableEdit="true"  EnableActions="true"  EnableFieldChooser="true" 
+ EnableStickyViews="true"  EnableToolbar="true"  EnableViews="true"  EnableFormatting="true"  EnableReadingPane="true" />
+<CRMC_PP:DrillUp />
+</apex:page>

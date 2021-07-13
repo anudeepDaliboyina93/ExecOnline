@@ -1,0 +1,8 @@
+.THIS .customRecordEditForm{
+    max-height : 25rem;
+	min-height: 11rem;
+}
+
+.THIS .slds-listbox.slds-listbox_vertical.slds-dropdown{
+    max-height : 100px;
+}

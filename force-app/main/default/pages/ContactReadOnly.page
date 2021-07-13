@@ -1,0 +1,20 @@
+<apex:page standardStylesheets="true" showHeader="false">
+    <apex:includeLightning />
+        <div id="LightningAppDivId">
+
+        </div>
+
+        <script>
+            $Lightning.use(
+                "c:LightningOutReadOnlyContact", 
+                function() {
+                    $Lightning.createComponent(
+                        "c:contactReadOnly",
+                        {},
+                        "LightningAppDivId"
+                    );
+                }
+            );
+        </script>
+    
+</apex:page>

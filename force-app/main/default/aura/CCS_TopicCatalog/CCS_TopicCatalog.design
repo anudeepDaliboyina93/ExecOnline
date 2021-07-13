@@ -1,0 +1,4 @@
+<design:component label="CCS Topic Catalog">
+    <design:attribute name="contactId" label="Contact Id" />
+	
+</design:component>

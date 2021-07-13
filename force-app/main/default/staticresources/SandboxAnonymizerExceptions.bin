@@ -1,0 +1,30 @@
+  {
+    "section": [
+      "program__r.name LIKE '%ExecOnline%'",
+      "program__r.name LIKE '%QA%'"
+      ],
+    "contact": [
+      "email LIKE '%@execonline.com'",
+      "email LIKE '%@trooptrack.com'",
+      "email LIKE '%@intelegencia.com'",
+      "email LIKE '%@mailinator.com'",
+      "email LIKE '%@andela.co'",
+      "current_student__r.program__r.name LIKE '%ExecOnline%'",
+      "current_student__r.program__r.name LIKE '%QA%'"    
+      ],
+    "team": [
+      "team_name__c LIKE '%ExecOnline%'",
+      "team_name__c LIKE '%QA%'",
+      "program__r.name LIKE '%ExecOnline%'",
+      "program__r.name LIKE '%QA%'"
+      ],
+    "program": [
+      "name LIKE '%ExecOnline%'",
+      "name LIKE '%QA%'"
+      ],
+    "account": [
+      "name LIKE '%ExecOnline%'",
+      "name LIKE '%QA - Org%'",
+      "name LIKE '%QA Campaign Org%'"
+    ]
+  }

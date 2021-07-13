@@ -1,0 +1,14 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <div class="slds-clearfix">
+        <div class="slds-p-horizontal--small slds-clearfix">
+            <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Opportunity" onsuccess="{!c.showToast}">
+                <lightning:messages />
+                <div class="slds-grid slds-gutters slds-wrap">
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning:inputField disabled="true" variant="label-hidden" class="tallTextArea" fieldName="Next_Step_Notes_Log__c"/>
+                    </div>
+                </div>
+            </lightning:recordEditForm>
+        </div>
+    </div>
+</aura:component>

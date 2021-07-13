@@ -1,0 +1,90 @@
+<template>
+    <lightning-card title="EPC Balance">
+        <template if:true={account.data}>
+            <div class={auditIsCompleteClass}>
+                <div class="slds-grid slds-wrap">
+                    <template if:true={usesNmCore}>
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-size_1-of-1" role="alert">
+                            <lightning-icon icon-name="utility:warning" alternative-text="warning" size="x-small"></lightning-icon>
+                            <h2 class="slds-m-left_small">Excludes NM Core Units, Displaying EPC Only</h2>
+                        </div>
+                    </template>
+
+
+                    <div class="slds-form-element slds-form-element_readonly slds-border_bottom slds-size_1-of-4">
+                        <span class="slds-form-element__label">Current EPC Balance</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{currentEpcBalance}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element slds-form-element_readonly slds-border_bottom slds-size_1-of-4">
+                        <span class="slds-form-element__label">Reserved EPCs</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{reservedEpcs}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element slds-form-element_readonly slds-border_bottom slds-size_1-of-4">
+                        <span class="slds-form-element__label">Finance Audit Status</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{financeAuditStatus}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element slds-form-element_readonly slds-border_bottom slds-size_1-of-4">
+                        <span class="slds-form-element__label">EPC Calculated Date</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{epcCalcDate}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-m-around_small">
+            <lightning-button variant="brand" label="Request Support" title="Request Support" onclick={handleRequestSupport}></lightning-button>
+            <span class="slds-float_right">
+                <lightning-button variant="neutral" icon-name={toggleShowDataIcon} label={toggleShowDataLabel} title="View datagrid of EPC history" onclick={toggleShowData}></lightning-button>
+            </span>
+        </div>
+
+        <template if:true={showData}>
+            <lightning-datatable
+                key-field="id"
+                data={tableData}
+                columns={columns}
+                hide-checkbox-column >
+            </lightning-datatable>
+        </template>
+
+        <template if:true={showSupportModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- modal header start -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">EPC Support</h2>
+                    </header>
+                    <!-- modal body start -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-textarea label="Question/Comment" onchange={handleSupportCommentChange} maxlength="250" data-id="support-comment"></lightning-textarea>
+                    </div>
+                    <!-- modal footer start-->
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={closeModal}></lightning-button>
+                        <lightning-button variant="brand" label={submitSupportLabel} title={submitSupportLabel} class="slds-m-left_small" onclick={submitSupportRequest} disabled={isSubmitPending}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-card>
+</template>

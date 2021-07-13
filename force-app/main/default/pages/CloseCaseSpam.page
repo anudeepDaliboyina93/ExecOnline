@@ -1,0 +1,36 @@
+<apex:page standardController="case" extensions="CloseCaseController" tabStyle="Case" showHeader="true" title="Case Edit">
+    <style>
+        a.editLink {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        img.hideListButton {
+            display: none;
+        }
+        textarea {
+            width: calc(100% - 200px);
+            min-width: 300px;
+        }
+    </style>
+    <apex:sectionHeader title="Close Case">
+        <apex:pageBlock >
+            <topics:widget entity="{!Case.Id}"/>
+        </apex:pageBlock>
+        <apex:form >
+            <apex:pageBlock title="Case Edit">
+                <apex:pageBlockButtons location="both">
+                    <apex:commandButton action="{!save}" value="Save"/>
+                    <apex:commandButton action="{!cancel}" value="Cancel"/>
+                </apex:pageBlockButtons>
+                <apex:pageMessages />
+
+                <apex:pageBlockSection title="Case Information" columns="1">
+                    <apex:inputField value="{!Case.Case_Tag_General__c}" id="SPAM" />
+                    
+                    
+                    
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:SectionHeader>
+</apex:page>

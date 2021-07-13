@@ -1,0 +1,6 @@
+.THIS .slds-tree__item-label{
+    text-decoration: underline;
+    font-size: large;
+    white-space: nowrap;
+    overflow: visible;
+}

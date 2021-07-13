@@ -1,0 +1,3 @@
+<design:component label="CCS Custom Search Results">
+    <design:attribute name="searchKeyword" label="Search Term" />
+</design:component>
