@@ -13,7 +13,7 @@ public class TRG_Opportunity_Helper {
                                                             AND OpportunityId IN:mapClosedWonOpps.keySet()
                                                             GROUP BY Product2.Finance_Code__c,Product2.Purchase_Type__c,OpportunityId
                                                             ,Opportunity.AccountId,Service_Category__c
-                                                           ];
+                                                            ];
             system.debug('listOppLinesAggrResult---'+listOppLinesAggrResult);
             if(listOppLinesAggrResult!=NULL && !listOppLinesAggrResult.isEmpty()){
                 for(AggregateResult aggr : listOppLinesAggrResult){
