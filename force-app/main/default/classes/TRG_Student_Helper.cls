@@ -7,12 +7,14 @@ public with sharing class TRG_Student_Helper {
         List<Applicable_Purchase__c> listApplicablePurchases = new List<Applicable_Purchase__c>();
         if(listStudents!=null && !listStudents.isEmpty()){
             for(Student__c studentRec : listStudents){
-                studentIdSet.add(studentRec.Id);
-                if(studentRec.Next_Program__c!=null){
-                    programIdSet.add(studentRec.Next_Program__c);
-                }
-                if(studentRec.Contact__c!=null){
-                    contactIdSet.add(studentRec.Contact__c);
+                if(studentRec.Status_Utilized__c){
+                    studentIdSet.add(studentRec.Id);
+                    if(studentRec.Program__c!=null){
+                        programIdSet.add(studentRec.Program__c);
+                    }
+                    if(studentRec.Contact__c!=null){
+                        contactIdSet.add(studentRec.Contact__c);
+                    }
                 }
             }
         }
@@ -29,12 +31,13 @@ public with sharing class TRG_Student_Helper {
                                                                                        ]);
             
             if(mapProgramFamily!=null && !mapProgramFamily.isEmpty()){
-                listApplicablePurchases = [Select Id
+                listApplicablePurchases = [Select Id,List_Quantity__c,Product__c,Purchase_Type__c,Service__c
                                            FROM Applicable_Purchase__c 
-                                           WHERE Service__c IN (Select Id
-                                                                FROM Service__c
-                                                                WHERE Program_Family__c IN:mapProgramFamily.keySet()
+                                           WHERE Service__c IN (Select Primary_Service__c
+                                                                FROM Program_Family__c
+                                                                WHERE Id IN:mapProgramFamily.keySet()
                                                                )
+                                                               Order BY Utilization_Priority__c
                                           ];
             }
         }
@@ -51,15 +54,49 @@ public with sharing class TRG_Student_Helper {
             
             if(mapAccounts!=null && !mapAccounts.isEmpty()){
                 
-                listEPCsProvisioned = [Select Id FROM EPC_Utilization__c
+                listEPCsProvisioned = [Select Id,Opportunity_Product__r.Product2Id 
+                                        FROM EPC_Utilization__c
                                        WHERE Account__c IN: mapAccounts.keySet()
                                        AND Type__c=:'Provisioned'
                                        AND Effective_Date__c<=:Date.Today()
                                        //AND Expiration_Date__c >= Date.today()
                                        AND Balance__c>:0
+                                       AND (Purchase_Type__c='Unlimited' OR Purchase_Type__c='Quantity')
                                       ];
             }
         }
-        
+        List<EPC_Utilization__c> listEPCUtilizationActuals = new List<EPC_Utilization__c>();
+        if(listStudents!=null && !listStudents.isEmpty()){
+            for(Student__c studentRec : listStudents){
+                if(studentRec.Status_Utilized__c){
+                    EPC_Utilization__c epcAct = new EPC_Utilization__c();
+                    epcAct.Type__c = 'Actual';
+                    if(listApplicablePurchases!=null && !listApplicablePurchases.isEmpty()){
+                        for(Applicable_Purchase__c appPurchase : listApplicablePurchases){
+                            boolean breakAway = false;
+                            if(listEPCsProvisioned!=null && !listEPCsProvisioned.isEmpty()){
+                                for(EPC_Utilization__c epcUtilProv : listEPCsProvisioned){
+                                    if(appPurchase.Product__c == epcUtilProv.Opportunity_Product__r.Product2Id){
+                                        breakAway = true;
+                                        epcAct.Provisioned_EPCU__c = epcUtilProv.Id;
+                                        if(epcUtilProv.Purchase_Type__c == 'Unlimitied' || epcUtilProv.Purchase_Type__c == 'Quantity'){
+                                            epcAct.Quantity_Utilized__c = appPurchase.List_Quantity__c;
+                                            listEPCUtilizationActuals.add(epcAct);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            if(breakAway){
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(listEPCUtilizationActuals!=null && !listEPCUtilizationActuals.isEmpty()){
+            List<Database.SaveResult> listSaveResult = Database.insert(listEPCUtilizationActuals);
+        }
     }
 }
